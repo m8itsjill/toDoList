@@ -1,5 +1,5 @@
 //
-//  ToDoTableViewController.swift
+//  AddToDoViewController.swift
 //  ToDoList
 //
 //  Created by Apple on 7/15/19.
@@ -8,29 +8,33 @@
 
 import UIKit
 
-class ToDoTableViewController: UITableViewController {
-
-
-func createToDos() -> [ToDo] {
+class AddToDoViewController: UITableViewController {
     
-    let swift = ToDo()
-    swift.name = "Learn Swift"
-    swift.important = true
+var previousVC = ToDoTableViewController()
     
-    let dog = ToDo()
-    dog.name = "Walk the Dog"
-    // important is set to false by default
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var importantSwitch: UISwitch!
     
-    return [swift, dog]
-}
-
-var toDos : [ToDo] = []
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        toDos = createToDos()
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    @IBAction func addTapped(_ sender: Any) {
+        let toDo = ToDo()
+        
+        if let titleText = titleTextField.text {
+            toDo.name = titleText
+            toDo.important = importantSwitch.isOn
+        }
+        previousVC.toDos.append(toDo)
+        previousVC.tableView.reloadData()
+        navigationController?.popViewController(animated : true)
     }
 
     // MARK: - Table view data source
@@ -42,28 +46,18 @@ var toDos : [ToDo] = []
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return toDos.count
+        return 0
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        // this gives us a single ToDo
-        let toDo = toDos[indexPath.row]
-        
-        performSegue(withIdentifier: "moveToComplete", sender: toDo)
-    }
-    
-    
+
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        let toDo = toDos[indexPath.row]
-        
-        
+        // Configure the cell...
 
         return cell
     }
-    
+    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -100,21 +94,14 @@ var toDos : [ToDo] = []
     }
     */
 
-    
+    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let addVC = segue.destination as? AddToDoViewController {
-            addVC.previousVC = self
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-        if let completeVC = segue.destination as? CompleteToDoViewController {
-            if let toDo = sender as? ToDo {
-                completeVC.selectedToDo = toDo
-                completeVC.previousVC = self
-            }
-        }
-}
+    */
+
 }
